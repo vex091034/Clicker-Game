@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Click Lab</title>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #090d1b;
+  color: white;
+  font-family: system-ui, sans-serif;
+}
+
+header {
+  padding: 16px 22px;
+  background: #131c32;
+  border-bottom: 1px solid #293b60;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+h1 {
+  margin: 0;
+  font-size: 23px;
+  font-weight: 950;
+}
+
+h1 span {
+  color: #7695ff;
+}
+
+header small {
+  color: #91a2c5;
+}
+
+main {
+  width: min(1100px, 96%);
+  margin: 20px auto;
+}
+
+iframe {
+  display: block;
+  width: 100%;
+  height: 1000px;
+  border: 1px solid #293b60;
+  border-radius: 16px;
+  background: #090d1b;
+}
+
+footer {
+  text-align: center;
+  padding: 15px;
+  color: #91a2c5;
+  font-size: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>⚡ CLICK <span>LAB</span></h1>
+  <small>ULTIMATE EDITION</small>
+</header>
+
+<main>
+
+<iframe
+  id="game"
+  title="Click Lab Game"
+  loading="eager"
+  allow="autoplay"
+></iframe>
+
+</main>
+
+<footer>
+  CLICK LAB · POWER YOUR UNIVERSE
+</footer>
+
+<script>
+const gameHTML = String.raw`<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bg:#090d1b;
+  --panel:#131c32;
+  --panel2:#1a2743;
+  --border:#293b60;
+  --text:#f1f5ff;
+  --muted:#91a2c5;
+  --accent:#7695ff;
+  --green:#55e6a7;
+  --gold:#ffd36e;
+}
+
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  padding:15px;
+  background:
+    radial-gradient(ellipse at 50% -15%,#253d70 0%,transparent 55%),
+    var(--bg);
+  color:var(--text);
+  font-family:system-ui,sans-serif;
+}
+
+button { font:inherit; }
+
+.container {
+  width:min(1050px,100%);
+  margin:auto;
+}
+
+.stats {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin-bottom:15px;
+}
+
+.panel {
+  background:linear-gradient(145deg,var(--panel2),var(--panel));
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:16px;
+  box-shadow:0 10px 30px #0003;
+}
+
+.label {
+  color:var(--muted);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+.value {
+  font-size:clamp(18px,3vw,26px);
+  font-weight:900;
+  margin-top:5px;
+  overflow-wrap:anywhere;
+}
+
+.main {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.click-panel {
+  min-height:380px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  overflow:hidden;
+}
+
+#core {
+  width:190px;
+  height:190px;
+  border:0;
+  border-radius:50%;
+  cursor:pointer;
+  font-size:65px;
+  color:white;
+  background:radial-gradient(circle at 32% 25%,#d0dcff,#829eff 35%,#536de0 70%,#354bb4);
+  box-shadow:0 0 30px #668aff55,0 13px 0 #293d9c,inset 0 5px 15px #ffffff66;
+  transition:.09s;
+  touch-action:manipulation;
+}
+
+#core:active {
+  transform:translateY(9px) scale(.96);
+}
+
+.subtitle {
+  color:var(--muted);
+  font-size:13px;
+  margin:7px 0 25px;
+}
+
+#critText {
+  color:var(--gold);
+  font-weight:900;
+  min-height:20px;
+  margin-top:15px;
+}
+
+h2 {
+  font-size:18px;
+  margin:0 0 13px;
+}
+
+.upgrade {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:#0c1428;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:11px;
+  margin-top:9px;
+}
+
+.icon {
+  width:40px;
+  height:40px;
+  flex-shrink:0;
+  display:grid;
+  place-items:center;
+  background:#25385f;
+  border-radius:10px;
+  font-size:21px;
+}
+
+.info { flex:1; min-width:0; }
+
+.info strong {
+  display:block;
+  font-size:13px;
+}
+
+.info small {
+  color:var(--muted);
+  font-size:10px;
+}
+
+.buy {
+  border:0;
+  border-radius:9px;
+  padding:9px;
+  background:#526fe0;
+  color:white;
+  font-weight:850;
+  font-size:11px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+.buy:disabled {
+  opacity:.35;
+  cursor:not-allowed;
+}
+
+.lower {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-top:14px;
+}
+
+.achievement {
+  display:flex;
+  gap:10px;
+  align-items:center;
+  background:#0d162a;
+  border:1px solid #263654;
+  border-radius:10px;
+  padding:9px;
+  margin-top:8px;
+}
+
+.achievement.locked { opacity:.35; }
+
+.achievement strong {
+  font-size:12px;
+  display:block;
+}
+
+.achievement small {
+  color:var(--muted);
+  font-size:10px;
+}
+
+.rebirth-info {
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.7;
+}
+
+.progress {
+  height:8px;
+  background:#080f20;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:10px;
+}
+
+.fill {
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#7295ff,#55e6a7);
+  transition:width .3s;
+}
+
+.rebirth-button {
+  width:100%;
+  padding:12px;
+  margin-top:12px;
+  background:linear-gradient(100deg,#b37bff,#6d79ff);
+  border:0;
+  border-radius:10px;
+  color:white;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.rebirth-button:disabled { opacity:.35; }
+
+.tools {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:15px;
+}
+
+.secondary {
+  background:#151e33;
+  color:var(--muted);
+  border:1px solid var(--border);
+  padding:9px 11px;
+  border-radius:9px;
+  cursor:pointer;
+  font-size:11px;
+}
+
+.float {
+  position:fixed;
+  pointer-events:none;
+  z-index:20;
+  color:var(--green);
+  font-size:19px;
+  font-weight:950;
+  animation:rise .85s forwards;
+}
+
+.float.critical {
+  color:var(--gold);
+  font-size:24px;
+}
+
+@keyframes rise {
+  to {
+    transform:translateY(-80px) scale(1.2);
+    opacity:0;
+  }
+}
+
+#toast {
+  position:fixed;
+  bottom:15px;
+  left:50%;
+  transform:translate(-50%,100px);
+  opacity:0;
+  background:#24375b;
+  border:1px solid #6688d6;
+  padding:12px 17px;
+  border-radius:12px;
+  font-weight:800;
+  font-size:12px;
+  transition:.3s;
+  z-index:30;
+  text-align:center;
+  max-width:90%;
+}
+
+#toast.show {
+  transform:translate(-50%,0);
+  opacity:1;
+}
+
+@media(max-width:650px) {
+  .stats { grid-template-columns:repeat(2,1fr); }
+  .main,.lower { grid-template-columns:1fr; }
+  #core { width:165px;height:165px; }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<section class="stats">
+  <div class="panel">
+    <div class="label">ENERGY</div>
+    <div class="value" id="energy">0</div>
+  </div>
+  <div class="panel">
+    <div class="label">PER CLICK</div>
+    <div class="value" id="power">1</div>
+  </div>
+  <div class="panel">
+    <div class="label">PER SECOND</div>
+    <div class="value" id="income">0</div>
+  </div>
+  <div class="panel">
+    <div class="label">REBIRTHS</div>
+    <div class="value" id="rebirths">0</div>
+  </div>
+</section>
+
+<div class="main">
+
+<section class="panel click-panel">
+  <strong style="font-size:20px">ENERGY CORE</strong>
+  <div class="subtitle">Click to generate energy.</div>
+  <button id="core">⚡</button>
+  <div class="subtitle">Click / Tap / Spacebar</div>
+  <div id="critText"></div>
+</section>
+
+<section class="panel">
+  <h2>🛠️ Upgrade shop</h2>
+  <div id="shop"></div>
+</section>
+
+</div>
+
+<div class="lower">
+
+<section class="panel">
+  <h2>🏆 Achievements</h2>
+  <div id="achievements"></div>
+</section>
+
+<section class="panel">
+  <h2>🌌 Rebirth</h2>
+  <div class="rebirth-info">
+    Reset your energy and upgrades to double your permanent multiplier.
+    <br><br>
+    Multiplier: <strong id="multiplier">x1</strong>
+    <br>
+    Requirement: <strong id="rebirthCost">100K</strong>
+    <div class="progress">
+      <div class="fill" id="progress"></div>
+    </div>
+  </div>
+  <button class="rebirth-button" id="rebirthButton">REBIRTH</button>
+</section>
+
+</div>
+
+<div class="tools">
+  <button class="secondary" id="soundButton">🔊 Sound ON</button>
+  <button class="secondary" id="saveButton">💾 Save</button>
+  <button class="secondary" id="exportButton">📤 Export</button>
+  <button class="secondary" id="importButton">📥 Import</button>
+  <button class="secondary" id="resetButton">🗑️ Reset</button>
+</div>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+"use strict";
+
+const KEY="click_lab_iframe_v1";
+
+const state={
+  energy:0,
+  total:0,
+  clicks:0,
+  rebirths:0,
+  sound:true,
+  lastSave:Date.now(),
+  upgrades:{
+    click:0,
+    generator:0,
+    factory:0,
+    reactor:0,
+    quantum:0,
+    singularity:0
+  },
+  achievements:[]
+};
+
+const upgrades=[
+  {id:"click",name:"Power Click",icon:"👆",desc:"+1 energy per click",base:25,scale:1.5,type:"click",amount:1},
+  {id:"generator",name:"Mini Generator",icon:"⚙️",desc:"+1 energy/sec",base:50,scale:1.55,type:"passive",amount:1},
+  {id:"factory",name:"Energy Factory",icon:"🏭",desc:"+8 energy/sec",base:300,scale:1.65,type:"passive",amount:8},
+  {id:"reactor",name:"Nuclear Reactor",icon:"☢️",desc:"+45 energy/sec",base:2000,scale:1.75,type:"passive",amount:45},
+  {id:"quantum",name:"Quantum Core",icon:"🔮",desc:"+250 energy/sec",base:15000,scale:1.85,type:"passive",amount:250},
+  {id:"singularity",name:"Singularity",icon:"🌌",desc:"+1500 energy/sec",base:100000,scale:2,type:"passive",amount:1500}
+];
+
+const achievements=[
+  {id:"first",icon:"👶",name:"First Click",desc:"Generate your first energy.",check:()=>state.clicks>=1},
+  {id:"hundred",icon:"💯",name:"Getting Started",desc:"Reach 100 energy generated.",check:()=>state.total>=100},
+  {id:"thousand",icon:"🔥",name:"Heating Up",desc:"Reach 1,000 energy generated.",check:()=>state.total>=1000},
+  {id:"million",icon:"💎",name:"Millionaire",desc:"Generate 1 million energy.",check:()=>state.total>=1000000},
+  {id:"collector",icon:"🛠️",name:"Collector",desc:"Purchase 25 upgrades.",check:()=>totalUpgrades()>=25},
+  {id:"rebirth",icon:"🌟",name:"New Beginning",desc:"Perform your first rebirth.",check:()=>state.rebirths>=1},
+  {id:"five",icon:"👑",name:"Ascended",desc:"Perform 5 rebirths.",check:()=>state.rebirths>=5}
+];
+
+const $=id=>document.getElementById(id);
+
+function format(n) {
+  if(!Number.isFinite(n)) return "∞";
+  if(n<1000) return Math.floor(n).toLocaleString();
+
+  const units=["K","M","B","T","Qa","Qi","Sx","Sp","Oc","No","Dc"];
+  let i=-1;
+
+  while(n>=1000 && i<units.length-1) {
+    n/=1000;
+    i++;
+  }
+
+  return n.toFixed(2)+units[i];
+}
+
+function totalUpgrades() {
+  return Object.values(state.upgrades).reduce((a,b)=>a+b,0);
+}
+
+function multiplier() {
+  return Math.pow(2,state.rebirths);
+}
+
+function power() {
+  return (1+state.upgrades.click)*multiplier();
+}
+
+function income() {
+  return upgrades
+    .filter(u=>u.type==="passive")
+    .reduce((sum,u)=>sum+state.upgrades[u.id]*u.amount,0)*multiplier();
+}
+
+function cost(u) {
+  return Math.floor(u.base*Math.pow(u.scale,state.upgrades[u.id]));
+}
+
+let audio=null;
+
+function sound(freq=500) {
+  if(!state.sound) return;
+
+  try {
+    audio??=new (window.AudioContext||window.webkitAudioContext)();
+
+    if(audio.state==="suspended") audio.resume();
+
+    const osc=audio.createOscillator();
+    const gain=audio.createGain();
+
+    osc.frequency.value=freq;
+    gain.gain.setValueAtTime(.07,audio.currentTime);
+    gain.gain.exponentialRampToValueAtTime(.001,audio.currentTime+.12);
+
+    osc.connect(gain);
+    gain.connect(audio.destination);
+
+    osc.start();
+    osc.stop(audio.currentTime+.12);
+  } catch(e) {}
+}
+
+let toastTimer;
+
+function toast(message) {
+  $("toast").textContent=message;
+  $("toast").classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer=setTimeout(()=>{
+    $("toast").classList.remove("show");
+  },2200);
+}
+
+function floatText(amount,x,y,critical) {
+  const el=document.createElement("div");
+
+  el.className="float"+(critical?" critical":"");
+  el.textContent=(critical?"CRITICAL! ":"+")+format(amount);
+  el.style.left=x+"px";
+  el.style.top=y+"px";
+
+  document.body.appendChild(el);
+
+  setTimeout(()=>el.remove(),900);
+}
+
+function click(x,y) {
+  const critical=Math.random()<.08;
+  const amount=power()*(critical?5:1);
+
+  state.energy+=amount;
+  state.total+=amount;
+  state.clicks++;
+
+  $("critText").textContent=critical?"💥 CRITICAL CLICK!":"";
+
+  sound(critical?1000:550);
+  floatText(amount,x,y,critical);
+
+  checkAchievements();
+  render();
+}
+
+$("core").addEventListener("click",e=>{
+  click(e.clientX,e.clientY);
+});
+
+document.addEventListener("keydown",e=>{
+  if(e.code==="Space" && e.target===document.body) {
+    e.preventDefault();
+
+    const r=$("core").getBoundingClientRect();
+
+    click(r.left+r.width/2,r.top+r.height/2);
+  }
+});
+
+function buy(id) {
+  const u=upgrades.find(x=>x.id===id);
+  const price=cost(u);
+
+  if(state.energy<price) return;
+
+  state.energy-=price;
+  state.upgrades[id]++;
+
+  sound(750);
+  toast(u.icon+" "+u.name+" purchased!");
+
+  checkAchievements();
+  render();
+  save();
+}
+
+function renderShop() {
+  $("shop").innerHTML="";
+
+  for(const u of upgrades) {
+    const item=document.createElement("div");
+    item.className="upgrade";
+
+    const icon=document.createElement("div");
+    icon.className="icon";
+    icon.textContent=u.icon;
+
+    const info=document.createElement("div");
+    info.className="info";
+
+    const name=document.createElement("strong");
+    name.textContent=u.name;
+
+    const desc=document.createElement("small");
+    desc.textContent=u.desc+" · Owned: "+state.upgrades[u.id];
+
+    info.append(name,desc);
+
+    const button=document.createElement("button");
+    button.className="buy";
+    button.textContent="Buy · "+format(cost(u));
+    button.disabled=state.energy<cost(u);
+    button.addEventListener("click",()=>buy(u.id));
+
+    item.append(icon,info,button);
+    $("shop").appendChild(item);
+  }
+}
+
+function checkAchievements() {
+  for(const a of achievements) {
+    if(!state.achievements.includes(a.id) && a.check()) {
+      state.achievements.push(a.id);
+      toast("🏆 Achievement unlocked: "+a.name);
+      sound(1100);
+      save();
+    }
+  }
+
+  renderAchievements();
+}
+
+function renderAchievements() {
+  $("achievements").innerHTML="";
+
+  for(const a of achievements) {
+    const unlocked=state.achievements.includes(a.id);
+
+    const item=document.createElement("div");
+    item.className="achievement"+(unlocked?"":" locked");
+
+    const icon=document.createElement("span");
+    icon.textContent=unlocked?a.icon:"🔒";
+
+    const info=document.createElement("div");
+
+    const name=document.createElement("strong");
+    name.textContent=a.name;
+
+    const desc=document.createElement("small");
+    desc.textContent=a.desc;
+
+    info.append(name,desc);
+    item.append(icon,info);
+
+    $("achievements").appendChild(item);
+  }
+}
+
+function rebirthCost() {
+  return 100000*Math.pow(5,state.rebirths);
+}
+
+$("rebirthButton").addEventListener("click",()=>{
+  const price=rebirthCost();
+
+  if(state.total<price) return;
+
+  if(!confirm("Reset energy and upgrades for a permanent 2x multiplier?")) return;
+
+  state.rebirths++;
+  state.energy=0;
+
+  for(const key of Object.keys(state.upgrades)) {
+    state.upgrades[key]=0;
+  }
+
+  toast("🌌 REBIRTH COMPLETE!");
+  sound(1200);
+
+  checkAchievements();
+  render();
+  save();
+});
+
+function render() {
+  $("energy").textContent=format(state.energy);
+  $("power").textContent=format(power());
+  $("income").textContent=format(income());
+  $("rebirths").textContent=state.rebirths;
+
+  $("multiplier").textContent="x"+format(multiplier());
+
+  const price=rebirthCost();
+
+  $("rebirthCost").textContent=format(price);
+  $("rebirthButton").disabled=state.total<price;
+
+  $("progress").style.width=
+    Math.min(100,state.total/price*100)+"%";
+
+  renderShop();
+  renderAchievements();
+}
+
+function save() {
+  state.lastSave=Date.now();
+
+  try {
+    localStorage.setItem(KEY,JSON.stringify(state));
+  } catch(e) {
+    console.warn("Saving unavailable",e);
+  }
+}
+
+function load() {
+  try {
+    const data=JSON.parse(localStorage.getItem(KEY)||"null");
+
+    if(!data || typeof data!=="object") return;
+
+    const valid=n=>typeof n==="number"&&Number.isFinite(n)&&n>=0;
+
+    for(const key of ["energy","total","clicks","rebirths"]) {
+      if(valid(data[key])) state[key]=data[key];
+    }
+
+    if(data.upgrades && typeof data.upgrades==="object") {
+      for(const key of Object.keys(state.upgrades)) {
+        if(valid(data.upgrades[key])) {
+          state.upgrades[key]=Math.floor(data.upgrades[key]);
+        }
+      }
+    }
+
+    if(Array.isArray(data.achievements)) {
+      state.achievements=data.achievements.filter(
+        id=>achievements.some(a=>a.id===id)
+      );
+    }
+
+    if(typeof data.sound==="boolean") state.sound=data.sound;
+
+    if(valid(data.lastSave)) {
+      const seconds=Math.min(
+        86400,
+        Math.max(0,(Date.now()-data.lastSave)/1000)
+      );
+
+      const gain=income()*seconds;
+
+      state.energy+=gain;
+      state.total+=gain;
+
+      if(gain>0) {
+        setTimeout(()=>{
+          toast("🌙 Offline earnings: +"+format(gain));
+          checkAchievements();
+          render();
+        },500);
+      }
+    }
+  } catch(e) {
+    console.warn("Save could not be loaded",e);
+  }
+}
+
+$("saveButton").addEventListener("click",()=>{
+  save();
+  toast("💾 Game saved!");
+});
+
+$("exportButton").addEventListener("click",()=>{
+  save();
+
+  const blob=new Blob(
+    [JSON.stringify(state,null,2)],
+    {type:"application/json"}
+  );
+
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+
+  a.href=url;
+  a.download="click-lab-save.json";
+  a.click();
+
+  URL.revokeObjectURL(url);
+});
+
+$("importButton").addEventListener("click",()=>{
+  const input=document.createElement("input");
+
+  input.type="file";
+  input.accept=".json,application/json";
+
+  input.addEventListener("change",async()=>{
+    const file=input.files[0];
+    if(!file) return;
+
+    try {
+      const data=JSON.parse(await file.text());
+
+      if(!data || typeof data!=="object") throw new Error();
+
+      localStorage.setItem(KEY,JSON.stringify(data));
+      location.reload();
+    } catch(e) {
+      toast("❌ Invalid save file!");
+    }
+  });
+
+  input.click();
+});
+
+$("soundButton").addEventListener("click",()=>{
+  state.sound=!state.sound;
+
+  $("soundButton").textContent=
+    state.sound?"🔊 Sound ON":"🔇 Sound OFF";
+
+  save();
+
+  if(state.sound) sound();
+});
+
+$("resetButton").addEventListener("click",()=>{
+  if(!confirm("Delete ALL progress?")) return;
+
+  localStorage.removeItem(KEY);
+  location.reload();
+});
+
+/* Passive energy generation */
+
+let previous=Date.now();
+
+setInterval(()=>{
+  const now=Date.now();
+
+  const elapsed=Math.min((now-previous)/1000,5);
+  previous=now;
+
+  const amount=income()*elapsed;
+
+  if(amount>0) {
+    state.energy+=amount;
+    state.total+=amount;
+
+    checkAchievements();
+    render();
+  }
+},250);
+
+/* Autosave */
+
+setInterval(save,5000);
+
+document.addEventListener("visibilitychange",()=>{
+  if(document.hidden) save();
+});
+
+load();
+
+$("soundButton").textContent=
+  state.sound?"🔊 Sound ON":"🔇 Sound OFF";
+
+render();
+checkAchievements();
+save();
+
+console.log("CLICK LAB v2.0 READY");
+<\/script>
+
+</body>
+</html>`;
+
+document.getElementById("game").srcdoc=gameHTML;
+</script>
+
+</body>
+</html>
